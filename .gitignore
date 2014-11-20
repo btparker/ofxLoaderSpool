@@ -1,8 +1,13 @@
-example/Makefile
-example/Project.xcconfig
-example/config.make
-example/example.xcodeproj/
-example/openFrameworks-Info.plist
+# No project files for examples
+*/bin/*
+*/Makefile
+*/Project.xcconfig
+*/config.make
+*/*.xcodeproj/
+*/openFrameworks-Info.plist
+
+
+
 # Some general ignore patterns
 
 */bin/*
