@@ -9,10 +9,6 @@
 #include "ofxLoaderSpool.h"
 
 ofxLoaderSpool::ofxLoaderSpool(){
-    
-}
-
-void ofxLoaderSpool::setup(){
     q = ProgressiveTextureLoadQueue::instance();
     
     q->setTexLodBias(-0.5); //negative gives you lower mipmaps >> sharper
@@ -20,9 +16,6 @@ void ofxLoaderSpool::setup(){
     q->setTargetTimePerFrame(10.0f);
     q->setNumberSimultaneousLoads(3);
     q->setVerbose(false);
-};
-
-void ofxLoaderSpool::update(){
 }
 
 ofxLoaderBatch* ofxLoaderSpool::addBatch(string id){

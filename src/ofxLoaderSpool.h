@@ -20,9 +20,6 @@ class ofxLoaderSpool{
         ofxLoaderSpool();
         ~ofxLoaderSpool();
     
-        void setup();
-        void update();
-    
         ofxLoaderBatch* addBatch(string id);
         ofxLoaderBatch* addBatch(ofxLoaderBatch* batch);
     

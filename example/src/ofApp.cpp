@@ -12,9 +12,6 @@ void ofApp::setup(){
         ofLogError("ofApp::setup","Need image files in bin/data/images to work!");
     }
     
-    // Initializes the loader queue and such
-    loaderSpool.setup();
-    
     //go through and create a batch for each image
     for(int i = 0; i < imageDir.numFiles(); i++){
         //Using filename as batch id
