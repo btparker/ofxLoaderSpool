@@ -15,32 +15,36 @@ void ofxLoaderBatch::setParentLoadQueue(ProgressiveTextureLoadQueue *_q){
     q = _q;
 }
 
-void ofxLoaderBatch::addBatch(string id){
-    ofxLoaderBatch* batch = new ofxLoaderBatch(id);
-    batches[id] = batch;
+string ofxLoaderBatch::getId(){
+    return id;
 }
 
-void ofxLoaderBatch::addTexture(string _filename, string _id = ""){
-    if(_id.length() == 0){
-        _id = _filename;
+void ofxLoaderBatch::addBatch(string _batchId){
+    ofxLoaderBatch* batch = new ofxLoaderBatch(_batchId);
+    batches[_batchId] = batch;
+}
+
+void ofxLoaderBatch::addTexture(string _textureFilename, string _textureId = ""){
+    if(_textureId.length() == 0){
+        _textureId = _textureFilename;
     }
-    ofLogNotice("Batch '"+id+"'",("Adding texture '"+_id + "' with file '"+_filename+"'"));
+    ofLogNotice("Batch '"+getId()+"'",("Adding texture '"+_textureId + "' with file '"+_textureFilename+"'"));
 
-    filenames[_id] = _filename;
-    initTexture(_id);
+    textureFilenames[_textureId] = _textureFilename;
+    initTexture(_textureId);
 }
 
-ofxLoaderBatch* ofxLoaderBatch::getBatch(string _id){
-    if(batches.count(_id) == 0){
-        ofLogError("Batch '"+id+"'::getBatch", "No batch found with id "+_id);
+ofxLoaderBatch* ofxLoaderBatch::getBatch(string _batchId){
+    if(batches.count(_batchId) == 0){
+        ofLogError("Batch '"+getId()+"'::getBatch", "No batch found with id "+_batchId);
         return;
     }
-    return batches[_id];
+    return batches[_batchId];
 }
 
 void ofxLoaderBatch::textureDrawable(ofxProgressiveTextureLoad::textureEvent& arg){
     drawable[arg.tex] = true;
-    ofLogNotice("Batch '"+id+"'",("Texture '"+ids[arg.tex] + "' drawable"));
+    ofLogNotice("Batch '"+getId()+"'",("Texture '"+ids[arg.tex] + "' drawable"));
 }
 
 
@@ -48,58 +52,58 @@ void ofxLoaderBatch::textureReady(ofxProgressiveTextureLoad::textureEvent& arg){
     if (arg.loaded){
         ready[arg.tex] = true;
     }else{
-        ofLogError("Batch '"+id+"'::textureReady",("Texture '"+ids[arg.tex] + "' load failed"));
+        ofLogError("Batch '"+getId()+"'::textureReady",("Texture '"+ids[arg.tex] + "' load failed"));
     }
 }
 
-void ofxLoaderBatch::initTexture(string _id){
-    if(filenames.count(_id) == 0){
-        ofLogError("Batch '"+id+"'::initTexture", "No texture found with id "+_id);
+void ofxLoaderBatch::initTexture(string _textureId){
+    if(textureFilenames.count(_textureId) == 0){
+        ofLogError("Batch '"+getId()+"'::initTexture", "No texture found with id "+_textureId);
         return;
     }
     
     ofTexture* t = new ofTexture(); //create your own texture to got data loaded into; it will be cleared!
-    textures[_id] = t;
-    ids[t] = _id;
+    textures[_textureId] = t;
+    ids[t] = _textureId;
     ready[t] = false;
     drawable[t] = false;
 }
 
-ofTexture* ofxLoaderBatch::loadTexture(string _id){
-    if(textures.count(_id) == 0){
-        ofLogError("Batch '"+id+"'::loadTexture", "No texture found with id "+_id);
+ofTexture* ofxLoaderBatch::loadTexture(string _textureId){
+    if(textures.count(_textureId) == 0){
+        ofLogError("Batch '"+getId()+"'::loadTexture", "No texture found with id "+_textureId);
         return NULL;
     }
-    initTexture(_id);
-    ofxProgressiveTextureLoad * loader = q->loadTexture(filenames[_id],
-                                                        getTexture(_id),		/*tex to load into*/
+    initTexture(_textureId);
+    ofxProgressiveTextureLoad * loader = q->loadTexture(textureFilenames[_textureId],
+                                                        getTexture(_textureId),		/*tex to load into*/
                                                         true,				/*MIP-MAPS!*/
                                                         CV_INTER_AREA);		/*Resize Quality*/
     
     ofAddListener(loader->textureReady, this, &ofxLoaderBatch::textureReady);
     ofAddListener(loader->textureDrawable, this, &ofxLoaderBatch::textureDrawable);
     
-    return getTexture(_id);
+    return getTexture(_textureId);
 }
 
-ofTexture* ofxLoaderBatch::getTexture(string _id){
-    if(textures.count(_id) == 0){
-        ofLogError("Batch '"+id+"'::getTexture", "No texture found with id "+_id);
+ofTexture* ofxLoaderBatch::getTexture(string _textureId){
+    if(textures.count(_textureId) == 0){
+        ofLogError("Batch '"+getId()+"'::getTexture", "No texture found with id "+_textureId);
         return;
     }
-    return textures[_id];
+    return textures[_textureId];
 }
 
-bool ofxLoaderBatch::isTextureReady(string _id){
-    return isTextureReady(textures[_id]);
+bool ofxLoaderBatch::isTextureReady(string _textureId){
+    return isTextureReady(textures[_textureId]);
 }
 
 bool ofxLoaderBatch::isTextureReady(ofTexture *tex){
     return ready[tex];
 }
 
-bool ofxLoaderBatch::isTextureDrawable(string _id){
-    return isTextureDrawable(textures[_id]);
+bool ofxLoaderBatch::isTextureDrawable(string _textureId){
+    return isTextureDrawable(textures[_textureId]);
 }
 
 bool ofxLoaderBatch::isTextureDrawable(ofTexture *tex){
@@ -107,7 +111,7 @@ bool ofxLoaderBatch::isTextureDrawable(ofTexture *tex){
 }
 
 string ofxLoaderBatch::getTextureFilename(ofTexture *tex){
-    return filenames[ids[tex]];
+    return textureFilenames[ids[tex]];
 }
 
 string ofxLoaderBatch::getTextureId(ofTexture *tex){
@@ -117,26 +121,26 @@ string ofxLoaderBatch::getTextureId(ofTexture *tex){
 void ofxLoaderBatch::clear(){
     for(map<string,ofxLoaderBatch*>::iterator iter = batches.begin(); iter != batches.end(); ++iter)
     {
-        string _id =  iter->first;
-        batches[_id]->clear();
+        string _batchId =  iter->first;
+        batches[_batchId]->clear();
     }
     for(map<string,ofTexture*>::iterator iter = textures.begin(); iter != textures.end(); ++iter)
     {
-        string _id =  iter->first;
-        clearTexture(_id);
+        string _textureId =  iter->first;
+        clearTexture(_textureId);
     }
 }
 
 void ofxLoaderBatch::load(){
     for(map<string,ofxLoaderBatch*>::iterator iter = batches.begin(); iter != batches.end(); ++iter)
     {
-        string _id =  iter->first;
-        batches[_id]->load();
+        string _batchId =  iter->first;
+        batches[_batchId]->load();
     }
     for(map<string,ofTexture*>::iterator iter = textures.begin(); iter != textures.end(); ++iter)
     {
-        string _id =  iter->first;
-        loadTexture(_id);
+        string _textureId =  iter->first;
+        loadTexture(_textureId);
     }
 }
 
@@ -159,36 +163,36 @@ bool ofxLoaderBatch::isReady(){
     bool isBatchReady = true;
     for(map<string,ofxLoaderBatch*>::iterator iter = batches.begin(); iter != batches.end(); ++iter)
     {
-        string _id =  iter->first;
-        isBatchReady = isBatchReady && batches[_id]->isReady();
+        string _batchId =  iter->first;
+        isBatchReady = isBatchReady && batches[_batchId]->isReady();
     }
     for(map<string,ofTexture*>::iterator iter = textures.begin(); iter != textures.end(); ++iter)
     {
-        string _id =  iter->first;
-        isBatchReady = isBatchReady && isTextureReady(_id);
+        string _textureId =  iter->first;
+        isBatchReady = isBatchReady && isTextureReady(_textureId);
     }
     return isBatchReady;
 }
 
 void ofxLoaderBatch::clearTexture(ofTexture *tex){
     if(ids.count(tex) == 0){
-        ofLogError("Batch '"+id+"'::clearTexture", "No texture found with given pointer");
+        ofLogError("Batch '"+getId()+"'::clearTexture", "No texture found with given pointer");
         return;
     }
 
     clearTexture(ids[tex]);
 }
 
-void ofxLoaderBatch::clearTexture(string _id){
-    if(textures.count(_id) == 0){
-        ofLogError("Batch '"+id+"'::clearTexture", "No texture found with id "+_id);
+void ofxLoaderBatch::clearTexture(string _textureId){
+    if(textures.count(_textureId) == 0){
+        ofLogError("Batch '"+getId()+"'::clearTexture", "No texture found with id "+_textureId);
         return;
     }
     
-    ready[textures[_id]] = false;
-    drawable[textures[_id]] = false;
-    textures[_id]->clear();
-    ofLogNotice("Batch '"+id+"'",("Texture '"+_id + "' cleared"));
+    ready[textures[_textureId]] = false;
+    drawable[textures[_textureId]] = false;
+    textures[_textureId]->clear();
+    ofLogNotice("Batch '"+getId()+"'",("Texture '"+_textureId + "' cleared"));
 }
 
 ofxLoaderBatch::~ofxLoaderBatch(){

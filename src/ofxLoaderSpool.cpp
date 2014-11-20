@@ -32,7 +32,7 @@ ofxLoaderBatch* ofxLoaderSpool::addBatch(string id){
 
 ofxLoaderBatch* ofxLoaderSpool::addBatch(ofxLoaderBatch* batch){
     batch->setParentLoadQueue(q);
-    return batches[batch->id] = batch;
+    return batches[batch->getId()] = batch;
 }
 
 void ofxLoaderSpool::clearBatch(string id){

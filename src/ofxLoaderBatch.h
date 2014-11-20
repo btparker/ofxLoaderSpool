@@ -21,6 +21,8 @@ public:
     ofxLoaderBatch(string _id);
     ~ofxLoaderBatch();
     
+    string getId();
+    
     void setParentLoadQueue(ProgressiveTextureLoadQueue * _q);
     
     bool isDrawable();
@@ -30,30 +32,33 @@ public:
     void clear();
     
     // Textures
-    void addTexture(string _filename, string _id);
+    void addTexture(string _filename, string _textureId);
     void initTexture(string _id);
     
-    ofTexture* getTexture(string _id);
+    ofTexture* getTexture(string _textureId);
     string getTextureFilename(ofTexture * tex);
     string getTextureId(ofTexture * tex);
     
-    ofTexture* loadTexture(string _id);
+    ofTexture* loadTexture(string _textureId);
     
     void textureReady(ofxProgressiveTextureLoad::textureEvent& arg);
     void textureDrawable(ofxProgressiveTextureLoad::textureEvent& arg);
     
-    bool isTextureReady(string _id);
+    bool isTextureReady(string _textureId);
     bool isTextureReady(ofTexture * tex);
-    bool isTextureDrawable(string _id);
+    bool isTextureDrawable(string _textureId);
     bool isTextureDrawable(ofTexture * tex);
 
-    void clearTexture(string _id);
+    void clearTexture(string _textureId);
     void clearTexture(ofTexture * tex);
     
     // Batches
     void addBatch(string _id);
     ofxLoaderBatch* getBatch(string _id);
     
+    
+    
+private:
     // FIELDS //
     string id;
     
@@ -66,11 +71,11 @@ public:
     // String key is id (which can default to the image filename)
     map<string, ofTexture*> textures;
     
-    // <ofTexture*, id>
+    // <ofTexture*, textureId>
     map<ofTexture*, string> ids;
     
-    // <id, filename>
-    map<string, string> filenames;
+    // <textureId, filename>
+    map<string, string> textureFilenames;
     
     // From the parent ofxLoaderSpool
     ProgressiveTextureLoadQueue * q;

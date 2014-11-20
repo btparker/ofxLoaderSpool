@@ -38,7 +38,6 @@ class ofxLoaderSpool{
     
     private:
         ProgressiveTextureLoadQueue * q;
-        
         map<string, ofxLoaderBatch*> batches;
 };
 
