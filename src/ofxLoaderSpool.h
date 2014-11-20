@@ -20,18 +20,19 @@ class ofxLoaderSpool{
         ofxLoaderSpool();
         ~ofxLoaderSpool();
     
-        ofxLoaderBatch* addBatch(string id);
+        ofxLoaderBatch* addBatch(string _batchId);
         ofxLoaderBatch* addBatch(ofxLoaderBatch* batch);
     
-        ofxLoaderBatch* getBatch(string id);
+        ofxLoaderBatch* getBatch(string _batchId);
         int getBatchesSize();
+        vector<string> getBatchIds();
     
-        void loadBatch(string id);
+        void loadBatch(string _batchId);
     
-        bool isBatchReady(string id);
-        bool isBatchDrawable(string id);
+        bool isBatchReady(string _batchId);
+        bool isBatchDrawable(string _batchId);
 
-        void clearBatch(string id);
+        void clearBatch(string _batchId);
     
     private:
         ProgressiveTextureLoadQueue * q;

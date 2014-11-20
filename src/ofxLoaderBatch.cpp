@@ -28,7 +28,7 @@ void ofxLoaderBatch::addTexture(string _textureFilename, string _textureId = "")
     if(_textureId.length() == 0){
         _textureId = _textureFilename;
     }
-    ofLogNotice("Batch '"+getId()+"'",("Adding texture '"+_textureId + "' with file '"+_textureFilename+"'"));
+    ofLogNotice("Batch '"+getId()+"'",("Adding texture '"+_textureId + "' ('"+_textureFilename+"')"));
 
     textureFilenames[_textureId] = _textureFilename;
     initTexture(_textureId);
@@ -79,7 +79,7 @@ ofTexture* ofxLoaderBatch::loadTexture(string _textureId){
                                                         getTexture(_textureId),		/*tex to load into*/
                                                         true,				/*MIP-MAPS!*/
                                                         CV_INTER_AREA);		/*Resize Quality*/
-    
+    ofLogNotice("Batch '"+getId()+"'",("Texture '"+_textureId + "' loading..."));
     ofAddListener(loader->textureReady, this, &ofxLoaderBatch::textureReady);
     ofAddListener(loader->textureDrawable, this, &ofxLoaderBatch::textureDrawable);
     
@@ -166,6 +166,7 @@ bool ofxLoaderBatch::isReady(){
         string _batchId =  iter->first;
         isBatchReady = isBatchReady && batches[_batchId]->isReady();
     }
+
     for(map<string,ofTexture*>::iterator iter = textures.begin(); iter != textures.end(); ++iter)
     {
         string _textureId =  iter->first;
@@ -192,7 +193,7 @@ void ofxLoaderBatch::clearTexture(string _textureId){
     ready[textures[_textureId]] = false;
     drawable[textures[_textureId]] = false;
     textures[_textureId]->clear();
-    ofLogNotice("Batch '"+getId()+"'",("Texture '"+_textureId + "' cleared"));
+    ofLogNotice("Batch '"+getId()+"'",("Texture '"+_textureId + "' ('"+textureFilenames[_textureId]+"') cleared"));
 }
 
 ofxLoaderBatch::~ofxLoaderBatch(){

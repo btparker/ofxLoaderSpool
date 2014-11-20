@@ -27,4 +27,7 @@ class ofApp : public ofBaseApp{
     
         ofTexture* texturePtr;
         ofTexture* textureNextPtr;
+    
+        string currBatchId;
+        string nextBatchId;
 };

@@ -8,40 +8,52 @@ void ofApp::setup(){
     //populate the directory object
     imageDir.listDir();
     
-    if(imageDir.numFiles() == 0){
-        ofLogError("ofApp::setup","Need image files in bin/data/images to work!");
+    if(imageDir.numFiles() < 2){
+        ofLogError("ofApp::setup","Need at least 2 image files in bin/data/images to work!");
     }
     
     //go through and create a batch for each image
     for(int i = 0; i < imageDir.numFiles(); i++){
-        //Using filename as batch id
-        ofxLoaderBatch* batch = new ofxLoaderBatch(imageDir.getName(i));
+        //Using file index as batch id
+        ofxLoaderBatch* batch = new ofxLoaderBatch(ofToString(i));
         
-        // Using the filename as image id as well (only one per batch)
-        batch->addTexture(imageDir.getPath(i),imageDir.getName(i));
+        // Giving the image file location, and then id'ing the image
+        batch->addTexture(imageDir.getPath(i),"single-image");
         
         loaderSpool.addBatch(batch);
     }
     
+    vector<string> batchIds = loaderSpool.getBatchIds();
+    
     // Loading an image
-    loaderSpool.loadBatch(imageDir.getName(0));
+    currBatchId = batchIds[0];
+    nextBatchId = batchIds[1];
+    loaderSpool.loadBatch(currBatchId);
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    
+    if(loaderSpool.isBatchDrawable(nextBatchId)){
+        loaderSpool.clearBatch(currBatchId);
+        currBatchId = nextBatchId;
+        nextBatchId = "";
+    }
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    if(loaderSpool.isBatchDrawable(imageDir.getName(0))){
-        loaderSpool.getBatch(imageDir.getName(0))->getTexture(imageDir.getName(0))->draw(0,0, ofGetWidth(), ofGetHeight());
+    if(loaderSpool.isBatchDrawable(currBatchId)){
+        loaderSpool.getBatch(currBatchId)->getTexture("single-image")->draw(0,0, ofGetWidth(), ofGetHeight());
     }
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
+    if(key == ' '){
+        vector<string> batchIds = loaderSpool.getBatchIds();
+        nextBatchId = ofToString((ofToInt(currBatchId)+1)%batchIds.size());
+        loaderSpool.loadBatch(nextBatchId);
+    }
 }
 
 //--------------------------------------------------------------

@@ -18,38 +18,54 @@ ofxLoaderSpool::ofxLoaderSpool(){
     q->setVerbose(false);
 }
 
-ofxLoaderBatch* ofxLoaderSpool::addBatch(string id){
-    ofxLoaderBatch* batch = new ofxLoaderBatch(id);
+ofxLoaderBatch* ofxLoaderSpool::addBatch(string _batchId){
+    ofxLoaderBatch* batch = new ofxLoaderBatch(_batchId);
     return addBatch(batch);
 }
 
 ofxLoaderBatch* ofxLoaderSpool::addBatch(ofxLoaderBatch* batch){
     batch->setParentLoadQueue(q);
-    return batches[batch->getId()] = batch;
+    batches[batch->getId()] = batch;
+    return batches[batch->getId()];
 }
 
-void ofxLoaderSpool::clearBatch(string id){
-    batches[id]->clear();
+void ofxLoaderSpool::clearBatch(string _batchId){
+    batches[_batchId]->clear();
 }
 
-void ofxLoaderSpool::loadBatch(string id){
-    batches[id]->load();
+void ofxLoaderSpool::loadBatch(string _batchId){
+    batches[_batchId]->load();
 }
 
-bool ofxLoaderSpool::isBatchReady(string id){
-    return batches[id]->isReady();
+bool ofxLoaderSpool::isBatchReady(string _batchId){
+    if(batches.count(_batchId) == 0){
+        return false;
+    }
+    return batches[_batchId]->isReady();
 }
 
-bool ofxLoaderSpool::isBatchDrawable(string id){
-    return batches[id]->isDrawable();
+bool ofxLoaderSpool::isBatchDrawable(string _batchId){
+    if(batches.count(_batchId) == 0){
+        return false;
+    }
+    return batches[_batchId]->isDrawable();
 }
 
-ofxLoaderBatch* ofxLoaderSpool::getBatch(string id){
-    return batches[id];
+ofxLoaderBatch* ofxLoaderSpool::getBatch(string _batchId){
+    return batches[_batchId];
 }
 
 int ofxLoaderSpool::getBatchesSize(){
     return batches.size();
+}
+
+vector<string> ofxLoaderSpool::getBatchIds(){
+    vector<string> batchIds;
+    for(map<string,ofxLoaderBatch*>::iterator iter = batches.begin(); iter != batches.end(); ++iter)
+    {
+        batchIds.push_back(iter->first);
+    }
+    return batchIds;
 }
 
 ofxLoaderSpool::~ofxLoaderSpool(){
