@@ -19,44 +19,27 @@ class ofxLoaderSpool{
     public:
         ofxLoaderSpool();
         ~ofxLoaderSpool();
+    
         void setup();
         void update();
     
-        void addBatch(string id);
-        void addImageToBatch(string id, string imageFilename);
-        void clearBatch(string id);
+        ofxLoaderBatch* addBatch(string id);
+        ofxLoaderBatch* addBatch(ofxLoaderBatch* batch);
+    
+        ofxLoaderBatch* getBatch(string id);
+        int getBatchesSize();
+    
         void loadBatch(string id);
+    
         bool isBatchReady(string id);
         bool isBatchDrawable(string id);
-        int getBatchesSize();
-        ofxLoaderBatch* getBatch(string id);
-    
-        ofTexture* getTexture(string imageFilename);
+
+        void clearBatch(string id);
     
     private:
-        void textureReady(ofxProgressiveTextureLoad::textureEvent& arg);
-        void textureDrawable(ofxProgressiveTextureLoad::textureEvent& arg);
-        
-        bool isTextureReady(string imageFilename);
-        bool isTextureReady(ofTexture * tex);
-        
-        bool isTextureDrawable(string imageFilename);
-        bool isTextureDrawable(ofTexture * tex);
-        
-        string getTextureFilename(ofTexture * tex);
-        
-        ofTexture* loadImage(string imageFilename);
-        void clearImage(string imageFilename);
-        void clearImage(ofTexture * tex);
-
         ProgressiveTextureLoadQueue * q;
-        map<string, ofTexture*> textures;
+        
         map<string, ofxLoaderBatch*> batches;
-        map<ofTexture*, bool> ready;
-        map<ofTexture *, bool> drawable;
-        map<ofTexture *, ofxProgressiveTextureLoad *> loaders;
-        map<ofTexture*, string> imageFilenames;
-    
 };
 
 #endif /* defined(__ofxLoaderSpool__) */

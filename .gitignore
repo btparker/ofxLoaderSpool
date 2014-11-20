@@ -1,3 +1,4 @@
+
 # No project files for examples
 */Makefile
 */Project.xcconfig
@@ -12,6 +13,7 @@
 */bin/*
 !*/bin/data/
 !*/bin/data/images
+*/bin/data/images/*
 # for bin folder in root
 /bin/*
 !/bin/data/
