@@ -4,7 +4,7 @@
 #include "ofxLoaderSpool.h"
 #include "ofxLoaderBatch.h"
 
-class testApp : public ofBaseApp{
+class ofApp : public ofBaseApp{
 	public:
 		void setup();
 		void update();
