@@ -33,6 +33,7 @@ class ofxLoaderSpool{
         bool isBatchDrawable(string _batchId);
 
         void clearBatch(string _batchId);
+        void removeBatch(string _batchId);
     
     private:
         ProgressiveTextureLoadQueue * q;

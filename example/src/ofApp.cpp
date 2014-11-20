@@ -50,9 +50,11 @@ void ofApp::draw(){
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
     if(key == ' '){
-        vector<string> batchIds = loaderSpool.getBatchIds();
-        nextBatchId = ofToString((ofToInt(currBatchId)+1)%batchIds.size());
-        loaderSpool.loadBatch(nextBatchId);
+        if(loaderSpool.isBatchDrawable(currBatchId)){
+            vector<string> batchIds = loaderSpool.getBatchIds();
+            nextBatchId = ofToString((ofToInt(currBatchId)+1)%batchIds.size());
+            loaderSpool.loadBatch(nextBatchId);
+        }
     }
 }
 
