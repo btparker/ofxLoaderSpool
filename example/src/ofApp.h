@@ -1,6 +1,8 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxLoaderSpool.h"
+#include "ofxLoaderBatch.h"
 
 class ofApp : public ofBaseApp{
 
