@@ -53,7 +53,8 @@ public:
     void clearTexture(ofTexture * tex);
     
     // Batches
-    void addBatch(string _id);
+    ofxLoaderBatch* addBatch(string _id);
+    ofxLoaderBatch* addBatch(ofxLoaderBatch* _batch);
     ofxLoaderBatch* getBatch(string _id);
     
     

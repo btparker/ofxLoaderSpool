@@ -19,14 +19,26 @@ string ofxLoaderBatch::getId(){
     return id;
 }
 
-void ofxLoaderBatch::addBatch(string _batchId){
+ofxLoaderBatch* ofxLoaderBatch::addBatch(string _batchId){
     ofxLoaderBatch* batch = new ofxLoaderBatch(_batchId);
-    batches[_batchId] = batch;
+    return addBatch(batch);
+}
+
+ofxLoaderBatch* ofxLoaderBatch::addBatch(ofxLoaderBatch* _batch){
+    if(batches.count(_batch->getId()) > 0){
+        ofLogError("Batch '"+getId()+"'::initTexture", "A batch with id "+_batch->getId()+" already exists!");
+        return;
+    }
+    return batches[_batch->getId()] = _batch;
 }
 
 void ofxLoaderBatch::addTexture(string _textureFilename, string _textureId = ""){
     if(_textureId.length() == 0){
         _textureId = _textureFilename;
+    }
+    if(textureFilenames.count(_textureId) > 0){
+        ofLogError("Batch '"+getId()+"'::addTexture", "A texture with id "+_textureId+" already exists!");
+        return;
     }
     ofLogNotice("Batch '"+getId()+"'",("Adding texture '"+_textureId + "' ('"+_textureFilename+"')"));
 
@@ -76,9 +88,9 @@ ofTexture* ofxLoaderBatch::loadTexture(string _textureId){
     }
     initTexture(_textureId);
     ofxProgressiveTextureLoad * loader = q->loadTexture(textureFilenames[_textureId],
-                                                        getTexture(_textureId),		/*tex to load into*/
-                                                        true,				/*MIP-MAPS!*/
-                                                        CV_INTER_AREA);		/*Resize Quality*/
+                                                        getTexture(_textureId),     /*tex to load into*/
+                                                        true,               /*MIP-MAPS!*/
+                                                        CV_INTER_AREA);     /*Resize Quality*/
     ofLogNotice("Batch '"+getId()+"'",("Texture '"+_textureId + "' loading..."));
     ofAddListener(loader->textureReady, this, &ofxLoaderBatch::textureReady);
     ofAddListener(loader->textureDrawable, this, &ofxLoaderBatch::textureDrawable);
