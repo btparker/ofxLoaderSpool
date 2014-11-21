@@ -42,6 +42,10 @@ void ofxLoaderBatch::addTexture(string _textureFilename, string _textureId = "")
     if(_textureId.length() == 0){
         _textureId = _textureFilename;
     }
+    if(!ofFile(_textureFilename).exists()){
+        ofLogError("Batch '"+getId()+"'::addTexture", "Cannot add texture '"+_textureId+"', file '"+_textureFilename+"' could not be found!");
+        return;
+    }
     if(textureFilenames.count(_textureId) > 0){
         ofLogError("Batch '"+getId()+"'::addTexture", "A texture with id "+_textureId+" already exists!");
         return;
