@@ -223,8 +223,8 @@ void ofxLoaderBatch::clearTexture(string _textureId){
     drawable[textures[_textureId]] = false;
     if(textures[_textureId]->isAllocated()){
         textures[_textureId]->clear();
+        ofLogNotice("Batch '"+getId()+"'",("Texture '"+_textureId + "' ('"+textureFilenames[_textureId]+"') cleared"));
     }
-    ofLogNotice("Batch '"+getId()+"'",("Texture '"+_textureId + "' ('"+textureFilenames[_textureId]+"') cleared"));
 }
 
 ofxLoaderBatch::~ofxLoaderBatch(){
