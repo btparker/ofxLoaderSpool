@@ -1,7 +1,19 @@
+
+# No project files for examples
+*/Makefile
+*/Project.xcconfig
+*/config.make
+*/*.xcodeproj/
+*/openFrameworks-Info.plist
+
+
+
 # Some general ignore patterns
 
 */bin/*
 !*/bin/data/
+!*/bin/data/images
+*/bin/data/images/*
 # for bin folder in root
 /bin/*
 !/bin/data/
