@@ -108,11 +108,15 @@ ofTexture* ofxLoaderBatch::loadTexture(string _textureId){
 }
 
 ofTexture* ofxLoaderBatch::getTexture(string _textureId){
-    if(textures.count(_textureId) == 0){
+    if(!hasTexture(_textureId)){
         ofLogError("Batch '"+getId()+"'::getTexture", "No texture found with id "+_textureId);
         return;
     }
     return textures[_textureId];
+}
+
+bool ofxLoaderBatch::hasTexture(string _textureId){
+    return textures.count(_textureId) != 0;
 }
 
 bool ofxLoaderBatch::isTextureReady(string _textureId){
