@@ -30,7 +30,7 @@ ofxLoaderBatch* ofxLoaderBatch::addBatch(string _batchId){
 
 ofxLoaderBatch* ofxLoaderBatch::addBatch(ofxLoaderBatch* _batch){
     if(batches.count(_batch->getId()) > 0){
-        ofLogError("Batch '"+getId()+"'::initTexture", "A batch with id "+_batch->getId()+" already exists!");
+        ofLogError("Batch '"+getId()+"'::addBatch", "A batch with id "+_batch->getId()+" already exists!");
         return;
     }
     batches[_batch->getId()] = _batch;
@@ -70,7 +70,7 @@ void ofxLoaderBatch::textureReady(ofxProgressiveTextureLoad::textureEvent& arg){
     if (arg.loaded){
         ready[arg.tex] = true;
     }else{
-        ofLogError("Batch '"+getId()+"'::textureReady",("Texture '"+ids[arg.tex] + "' load failed"));
+        ofLogError("Batch '"+getId()+"'::textureReady",("Texture '"+ids[arg.tex] + "' ('"+textureFilenames[ids[arg.tex]]+"') load failed"));
     }
 }
 
@@ -79,7 +79,9 @@ void ofxLoaderBatch::initTexture(string _textureId){
         ofLogError("Batch '"+getId()+"'::initTexture", "No texture found with id "+_textureId);
         return;
     }
-    
+    if(textures.count(_textureId) != 0){
+        clearTexture(_textureId);
+    }
     ofTexture* t = new ofTexture(); //create your own texture to got data loaded into; it will be cleared!
     textures[_textureId] = t;
     ids[t] = _textureId;
@@ -97,6 +99,7 @@ ofTexture* ofxLoaderBatch::loadTexture(string _textureId){
                                                         getTexture(_textureId),     /*tex to load into*/
                                                         true,               /*MIP-MAPS!*/
                                                         CV_INTER_AREA);     /*Resize Quality*/
+
     ofLogNotice("Batch '"+getId()+"'",("Texture '"+_textureId + "' loading..."));
     ofAddListener(loader->textureReady, this, &ofxLoaderBatch::textureReady);
     ofAddListener(loader->textureDrawable, this, &ofxLoaderBatch::textureDrawable);
@@ -210,7 +213,9 @@ void ofxLoaderBatch::clearTexture(string _textureId){
     
     ready[textures[_textureId]] = false;
     drawable[textures[_textureId]] = false;
-    textures[_textureId]->clear();
+    if(textures[_textureId]->isAllocated()){
+        textures[_textureId]->clear();
+    }
     ofLogNotice("Batch '"+getId()+"'",("Texture '"+_textureId + "' ('"+textureFilenames[_textureId]+"') cleared"));
 }
 
