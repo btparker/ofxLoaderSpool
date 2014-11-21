@@ -110,7 +110,7 @@ ofTexture* ofxLoaderBatch::loadTexture(string _textureId){
 ofTexture* ofxLoaderBatch::getTexture(string _textureId){
     if(!hasTexture(_textureId)){
         ofLogError("Batch '"+getId()+"'::getTexture", "No texture found with id "+_textureId);
-        return;
+        return NULL;
     }
     return textures[_textureId];
 }
