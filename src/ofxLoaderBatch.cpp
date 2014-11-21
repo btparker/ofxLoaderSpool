@@ -11,6 +11,10 @@ ofxLoaderBatch::ofxLoaderBatch(string _id){
     id = _id;
 }
 
+ProgressiveTextureLoadQueue * ofxLoaderBatch::getParentLoadQueue(){
+    return q;
+}
+
 void ofxLoaderBatch::setParentLoadQueue(ProgressiveTextureLoadQueue *_q){
     q = _q;
 }
@@ -29,7 +33,9 @@ ofxLoaderBatch* ofxLoaderBatch::addBatch(ofxLoaderBatch* _batch){
         ofLogError("Batch '"+getId()+"'::initTexture", "A batch with id "+_batch->getId()+" already exists!");
         return;
     }
-    return batches[_batch->getId()] = _batch;
+    batches[_batch->getId()] = _batch;
+    batches[_batch->getId()]->setParentLoadQueue(getParentLoadQueue());
+    return batches[_batch->getId()];
 }
 
 void ofxLoaderBatch::addTexture(string _textureFilename, string _textureId = ""){

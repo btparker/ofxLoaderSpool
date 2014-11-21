@@ -23,7 +23,9 @@ public:
     
     string getId();
     
+    ProgressiveTextureLoadQueue * getParentLoadQueue();
     void setParentLoadQueue(ProgressiveTextureLoadQueue * _q);
+    
     
     bool isDrawable();
     bool isReady();
