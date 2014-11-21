@@ -38,6 +38,7 @@ public:
     void initTexture(string _id);
     
     ofTexture* getTexture(string _textureId);
+    bool hasTexture(string _textureId);
     string getTextureFilename(ofTexture * tex);
     string getTextureId(ofTexture * tex);
     
