@@ -25,7 +25,7 @@ string ofxLoaderBatch::getId(){
     return id;
 }
 
-string ofxLoaderBatch::setId(string _id){
+void ofxLoaderBatch::setId(string _id){
     id = _id;
 }
 
@@ -37,7 +37,7 @@ ofxLoaderBatch* ofxLoaderBatch::addBatch(string _batchId){
 ofxLoaderBatch* ofxLoaderBatch::addBatch(ofxLoaderBatch* _batch){
     if(batches.count(_batch->getId()) > 0){
         ofLogError("Batch '"+getId()+"'::addBatch", "A batch with id "+_batch->getId()+" already exists!");
-        return;
+        return NULL;
     }
     batches[_batch->getId()] = _batch;
     batches[_batch->getId()]->setParentLoadQueue(getParentLoadQueue());
@@ -65,7 +65,7 @@ void ofxLoaderBatch::addTexture(string _textureFilename, string _textureId = "")
 ofxLoaderBatch* ofxLoaderBatch::getBatch(string _batchId){
     if(batches.count(_batchId) == 0){
         ofLogError("Batch '"+getId()+"'::getBatch", "No batch found with id "+_batchId);
-        return;
+        return NULL;
     }
     return batches[_batchId];
 }

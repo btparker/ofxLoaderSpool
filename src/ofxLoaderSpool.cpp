@@ -12,7 +12,7 @@ ofxLoaderSpool::ofxLoaderSpool(){
     q = ProgressiveTextureLoadQueue::instance();
     
     q->setTexLodBias(0); //negative gives you lower mipmaps >> sharper
-    q->setScanlinesPerLoop(32);
+    q->setScanlinesPerLoop(128);
     q->setTargetTimePerFrame(10.0f);
     q->setNumberSimultaneousLoads(3);
     q->setVerbose(false);

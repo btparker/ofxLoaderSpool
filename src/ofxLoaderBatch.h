@@ -23,7 +23,7 @@ public:
     ~ofxLoaderBatch();
     
     string getId();
-    string setId(string _id);
+    void setId(string _id);
     
     ProgressiveTextureLoadQueue * getParentLoadQueue();
     void setParentLoadQueue(ProgressiveTextureLoadQueue * _q);
