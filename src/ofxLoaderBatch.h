@@ -18,10 +18,12 @@ public:
     
     // FUNCTIONS //
     
+    ofxLoaderBatch();
     ofxLoaderBatch(string _id);
     ~ofxLoaderBatch();
     
     string getId();
+    string setId(string _id);
     
     ProgressiveTextureLoadQueue * getParentLoadQueue();
     void setParentLoadQueue(ProgressiveTextureLoadQueue * _q);

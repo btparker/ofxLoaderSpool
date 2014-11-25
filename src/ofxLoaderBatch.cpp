@@ -6,6 +6,8 @@
 //
 
 #include "ofxLoaderBatch.h"
+ofxLoaderBatch::ofxLoaderBatch(){
+}
 
 ofxLoaderBatch::ofxLoaderBatch(string _id){
     id = _id;
@@ -21,6 +23,10 @@ void ofxLoaderBatch::setParentLoadQueue(ProgressiveTextureLoadQueue *_q){
 
 string ofxLoaderBatch::getId(){
     return id;
+}
+
+string ofxLoaderBatch::setId(string _id){
+    id = _id;
 }
 
 ofxLoaderBatch* ofxLoaderBatch::addBatch(string _batchId){
