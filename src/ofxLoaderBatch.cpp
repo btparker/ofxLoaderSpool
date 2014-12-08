@@ -72,6 +72,13 @@ ofxLoaderBatch* ofxLoaderBatch::getBatch(string _batchId){
 
 void ofxLoaderBatch::textureDrawable(ofxProgressiveTextureLoad::textureEvent& arg){
     drawable[arg.tex] = true;
+    if(isDrawable()){
+        batchEvent ev;
+        ev.loaded = true;
+        ev.batch = this;
+        ev.elapsedTime = ofGetElapsedTimef() - startTime;
+        ofNotifyEvent(batchDrawable, ev, this);
+    }
     ofLogNotice("Batch '"+getId()+"'",("Texture '"+ids[arg.tex] + "' drawable"));
 }
 
@@ -79,6 +86,14 @@ void ofxLoaderBatch::textureDrawable(ofxProgressiveTextureLoad::textureEvent& ar
 void ofxLoaderBatch::textureReady(ofxProgressiveTextureLoad::textureEvent& arg){
     if (arg.loaded){
         ready[arg.tex] = true;
+        if(isReady()){
+            batchEvent ev;
+            ev.loaded = true;
+            ev.batch = this;
+            ev.elapsedTime = ofGetElapsedTimef() - startTime;
+            ofNotifyEvent(batchReady, ev, this);
+        }
+        
     }else{
         ofLogError("Batch '"+getId()+"'::textureReady",("Texture '"+ids[arg.tex] + "' ('"+textureFilenames[ids[arg.tex]]+"') load failed"));
     }
@@ -109,11 +124,9 @@ ofTexture* ofxLoaderBatch::loadTexture(string _textureId){
                                                         getTexture(_textureId),     /*tex to load into*/
                                                         true,               /*MIP-MAPS!*/
                                                         CV_INTER_AREA);     /*Resize Quality*/
-
     ofLogNotice("Batch '"+getId()+"'",("Texture '"+_textureId + "' loading..."));
     ofAddListener(loader->textureReady, this, &ofxLoaderBatch::textureReady);
     ofAddListener(loader->textureDrawable, this, &ofxLoaderBatch::textureDrawable);
-    
     return getTexture(_textureId);
 }
 
@@ -167,6 +180,7 @@ void ofxLoaderBatch::clear(){
 }
 
 void ofxLoaderBatch::load(){
+    startTime = ofGetElapsedTimef();
     for(map<string,ofxLoaderBatch*>::iterator iter = batches.begin(); iter != batches.end(); ++iter)
     {
         string _batchId =  iter->first;

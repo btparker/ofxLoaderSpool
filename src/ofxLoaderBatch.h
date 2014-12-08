@@ -13,10 +13,7 @@
 
 class ofxLoaderBatch{
 public:
-    
-    
-    
-    // FUNCTIONS //
+        // FUNCTIONS //
     
     ofxLoaderBatch();
     ofxLoaderBatch(string _id);
@@ -62,7 +59,21 @@ public:
     ofxLoaderBatch* addBatch(ofxLoaderBatch* _batch);
     ofxLoaderBatch* getBatch(string _id);
     
+    struct batchEvent{
+        bool							loaded;
+        ofxLoaderBatch*					batch;
+        float 							elapsedTime;
+        bool							canceledLoad;
+        
+        batchEvent(){
+            loaded = true;
+            canceledLoad = false;
+            batch = NULL;
+        }
+    };
     
+    ofEvent<batchEvent>	batchReady; //will notify when the batch is fully loaded, or failed to load
+    ofEvent<batchEvent>	batchDrawable; //will notfy when the batch is drawable,
     
 private:
     // FIELDS //
@@ -85,6 +96,8 @@ private:
     
     // From the parent ofxLoaderSpool
     ProgressiveTextureLoadQueue * q;
+
+    float 				startTime;
 };
 
 
