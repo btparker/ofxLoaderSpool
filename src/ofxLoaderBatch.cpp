@@ -77,7 +77,7 @@ void ofxLoaderBatch::textureDrawable(ofxProgressiveTextureLoad::textureEvent& ar
 
 
 void ofxLoaderBatch::textureReady(ofxProgressiveTextureLoad::textureEvent& arg){
-    if (arg.loaded){
+    if (arg.fullyLoaded){
         ready[arg.tex] = true;
     }else{
         ofLogError("Batch '"+getId()+"'::textureReady",("Texture '"+ids[arg.tex] + "' ('"+textureFilenames[ids[arg.tex]]+"') load failed"));
