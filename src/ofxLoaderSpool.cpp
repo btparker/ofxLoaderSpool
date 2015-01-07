@@ -23,6 +23,10 @@ ofxLoaderBatch* ofxLoaderSpool::addBatch(string _batchId){
     return addBatch(batch);
 }
 
+void ofxLoaderSpool::update(){
+    q->update();
+}
+
 ofxLoaderBatch* ofxLoaderSpool::addBatch(ofxLoaderBatch* batch){
     if(batches.count(batch->getId()) > 0){
         ofLogError("ofxLoaderSpool::addBatch", "Already a batch with id "+batch->getId());
