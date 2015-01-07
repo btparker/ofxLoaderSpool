@@ -84,7 +84,7 @@ void ofxLoaderBatch::textureDrawable(ofxProgressiveTextureLoad::textureEvent& ar
 
 
 void ofxLoaderBatch::textureReady(ofxProgressiveTextureLoad::textureEvent& arg){
-    if (arg.loaded){
+    if (arg.fullyLoaded){
         ready[arg.tex] = true;
         if(isReady()){
             batchEvent ev;
