@@ -250,11 +250,9 @@ void ofxLoaderBatch::clearTexture(string _textureId){
 ofxLoaderBatch::~ofxLoaderBatch(){
     for(map<string,ofTexture*>::iterator iter = textures.begin(); iter != textures.end(); ++iter)
     {
-        clearTexture(textures[iter->first]);
         ids.erase(iter->second);
         ready.erase(iter->second);
         drawable.erase(iter->second);
-//        textures.erase(iter);
         delete textures[iter->first];
     }
 }
