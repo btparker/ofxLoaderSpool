@@ -107,11 +107,11 @@ void ofxLoaderBatch::initTexture(string _textureId){
     if(textures.count(_textureId) != 0){
         clearTexture(_textureId);
     }
-    ofTexture* t = new ofTexture(); //create your own texture to got data loaded into; it will be cleared!
+    ofTexture t = ofTexture(); //create your own texture to got data loaded into; it will be cleared!
     textures[_textureId] = t;
-    ids[t] = _textureId;
-    ready[t] = false;
-    drawable[t] = false;
+    ids[&t] = _textureId;
+    ready[&t] = false;
+    drawable[&t] = false;
 }
 
 ofTexture* ofxLoaderBatch::loadTexture(string _textureId){
@@ -135,7 +135,7 @@ ofTexture* ofxLoaderBatch::getTexture(string _textureId){
         ofLogError("Batch '"+getId()+"'::getTexture", "No texture found with id "+_textureId);
         return NULL;
     }
-    return textures[_textureId];
+    return &textures[_textureId];
 }
 
 bool ofxLoaderBatch::hasTexture(string _textureId){
@@ -143,7 +143,7 @@ bool ofxLoaderBatch::hasTexture(string _textureId){
 }
 
 bool ofxLoaderBatch::isTextureReady(string _textureId){
-    return isTextureReady(textures[_textureId]);
+    return isTextureReady(&textures[_textureId]);
 }
 
 bool ofxLoaderBatch::isTextureReady(ofTexture *tex){
@@ -151,7 +151,7 @@ bool ofxLoaderBatch::isTextureReady(ofTexture *tex){
 }
 
 bool ofxLoaderBatch::isTextureDrawable(string _textureId){
-    return isTextureDrawable(textures[_textureId]);
+    return isTextureDrawable(&textures[_textureId]);
 }
 
 bool ofxLoaderBatch::isTextureDrawable(ofTexture *tex){
@@ -172,7 +172,7 @@ void ofxLoaderBatch::clear(){
         string _batchId =  iter->first;
         batches[_batchId].clear();
     }
-    for(map<string,ofTexture*>::iterator iter = textures.begin(); iter != textures.end(); ++iter)
+    for(map<string,ofTexture>::iterator iter = textures.begin(); iter != textures.end(); ++iter)
     {
         string _textureId =  iter->first;
         clearTexture(_textureId);
@@ -186,7 +186,7 @@ void ofxLoaderBatch::load(){
         string _batchId =  iter->first;
         batches[_batchId].load();
     }
-    for(map<string,ofTexture*>::iterator iter = textures.begin(); iter != textures.end(); ++iter)
+    for(map<string,ofTexture>::iterator iter = textures.begin(); iter != textures.end(); ++iter)
     {
         string _textureId =  iter->first;
         loadTexture(_textureId);
@@ -200,7 +200,7 @@ bool ofxLoaderBatch::isDrawable(){
         string _id =  iter->first;
         isBatchDrawable = isBatchDrawable && batches[_id].isDrawable();
     }
-    for(map<string,ofTexture*>::iterator iter = textures.begin(); iter != textures.end(); ++iter)
+    for(map<string,ofTexture>::iterator iter = textures.begin(); iter != textures.end(); ++iter)
     {
         string _id =  iter->first;
         isBatchDrawable = isBatchDrawable && isTextureDrawable(_id);
@@ -216,7 +216,7 @@ bool ofxLoaderBatch::isReady(){
         isBatchReady = isBatchReady && batches[_batchId].isReady();
     }
 
-    for(map<string,ofTexture*>::iterator iter = textures.begin(); iter != textures.end(); ++iter)
+    for(map<string,ofTexture>::iterator iter = textures.begin(); iter != textures.end(); ++iter)
     {
         string _textureId =  iter->first;
         isBatchReady = isBatchReady && isTextureReady(_textureId);
@@ -239,10 +239,10 @@ void ofxLoaderBatch::clearTexture(string _textureId){
         return;
     }
     
-    ready[textures[_textureId]] = false;
-    drawable[textures[_textureId]] = false;
-    if(textures[_textureId]->isAllocated()){
-        textures[_textureId]->clear();
+    ready[&textures[_textureId]] = false;
+    drawable[&textures[_textureId]] = false;
+    if(textures[_textureId].isAllocated()){
+        textures[_textureId].clear();
         
         ofLogNotice("Batch '"+getId()+"'",("Texture '"+_textureId + "' ('"+textureFilenames[_textureId]+"') cleared"));
     }
@@ -250,12 +250,11 @@ void ofxLoaderBatch::clearTexture(string _textureId){
 }
 
 ofxLoaderBatch::~ofxLoaderBatch(){
-    for(map<string,ofTexture*>::iterator iter = textures.begin(); iter != textures.end(); ++iter)
+    for(map<string,ofTexture>::iterator iter = textures.begin(); iter != textures.end(); ++iter)
     {
-        ids.erase(iter->second);
-        ready.erase(iter->second);
-        drawable.erase(iter->second);
-        delete textures[iter->first];
+        ids.erase(&iter->second);
+        ready.erase(&iter->second);
+        drawable.erase(&iter->second);
     }
     textures.clear();
 }
