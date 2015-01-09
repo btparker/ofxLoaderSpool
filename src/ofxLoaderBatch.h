@@ -86,7 +86,7 @@ private:
     map<ofTexture *, bool> drawable;
     
     // String key is id (which can default to the image filename)
-    map<string, ofTexture*> textures;
+    map<string, ofTexture> textures;
     
     // <ofTexture*, textureId>
     map<ofTexture*, string> ids;
