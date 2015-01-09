@@ -19,7 +19,7 @@ ofxLoaderSpool::ofxLoaderSpool(){
 }
 
 ofxLoaderBatch* ofxLoaderSpool::addBatch(string _batchId){
-    ofxLoaderBatch* batch = new ofxLoaderBatch(_batchId);
+    ofxLoaderBatch batch = ofxLoaderBatch(_batchId);
     return addBatch(batch);
 }
 
@@ -27,14 +27,14 @@ void ofxLoaderSpool::update(){
     q->update();
 }
 
-ofxLoaderBatch* ofxLoaderSpool::addBatch(ofxLoaderBatch* batch){
-    if(batches.count(batch->getId()) > 0){
-        ofLogError("ofxLoaderSpool::addBatch", "Already a batch with id "+batch->getId());
+ofxLoaderBatch* ofxLoaderSpool::addBatch(ofxLoaderBatch batch){
+    if(batches.count(batch.getId()) > 0){
+        ofLogError("ofxLoaderSpool::addBatch", "Already a batch with id "+batch.getId());
         return NULL;
     }
-    batch->setParentLoadQueue(q);
-    batches[batch->getId()] = batch;
-    return batches[batch->getId()];
+    batch.setParentLoadQueue(q);
+    batches[batch.getId()] = batch;
+    return &batches[batch.getId()];
 }
 
 void ofxLoaderSpool::clearBatch(string _batchId){
@@ -42,7 +42,7 @@ void ofxLoaderSpool::clearBatch(string _batchId){
         ofLogError("ofxLoaderSpool::loadBatch", "No batch found with id "+_batchId);
         return;
     }
-    batches[_batchId]->clear();
+    batches[_batchId].clear();
 }
 
 void ofxLoaderSpool::removeBatch(string _batchId){
@@ -50,8 +50,8 @@ void ofxLoaderSpool::removeBatch(string _batchId){
         ofLogWarning("ofxLoaderSpool::removeBatch", "No batch found with id "+_batchId);
         return;
     }
-    batches[_batchId]->clear();
-    delete batches[_batchId];
+    batches[_batchId].clear();
+    batches.erase(_batchId);
 }
 
 void ofxLoaderSpool::loadBatch(string _batchId){
@@ -59,21 +59,21 @@ void ofxLoaderSpool::loadBatch(string _batchId){
         ofLogError("ofxLoaderSpool::loadBatch", "No batch found with id "+_batchId);
         return;
     }
-    batches[_batchId]->load();
+    batches[_batchId].load();
 }
 
 bool ofxLoaderSpool::isBatchReady(string _batchId){
     if(batches.count(_batchId) == 0){
         return false;
     }
-    return batches[_batchId]->isReady();
+    return batches[_batchId].isReady();
 }
 
 bool ofxLoaderSpool::isBatchDrawable(string _batchId){
     if(batches.count(_batchId) == 0){
         return false;
     }
-    return batches[_batchId]->isDrawable();
+    return batches[_batchId].isDrawable();
 }
 
 ofxLoaderBatch* ofxLoaderSpool::getBatch(string _batchId){
@@ -81,7 +81,7 @@ ofxLoaderBatch* ofxLoaderSpool::getBatch(string _batchId){
         ofLogWarning("ofxLoaderSpool::getBatch", "No batch found with id "+_batchId);
         return NULL;
     }
-    return batches[_batchId];
+    return &batches[_batchId];
 }
 
 int ofxLoaderSpool::getBatchesSize(){
@@ -90,7 +90,7 @@ int ofxLoaderSpool::getBatchesSize(){
 
 vector<string> ofxLoaderSpool::getBatchIds(){
     vector<string> batchIds;
-    for(map<string,ofxLoaderBatch*>::iterator iter = batches.begin(); iter != batches.end(); ++iter)
+    for(map<string,ofxLoaderBatch>::iterator iter = batches.begin(); iter != batches.end(); ++iter)
     {
         batchIds.push_back(iter->first);
     }
@@ -98,10 +98,4 @@ vector<string> ofxLoaderSpool::getBatchIds(){
 }
 
 ofxLoaderSpool::~ofxLoaderSpool(){
-    for(map<string,ofxLoaderBatch*>::iterator iter = batches.begin(); iter != batches.end(); ++iter)
-    {
-        string id =  iter->first;
-        batches[id]->clear();
-        delete batches[id];
-    }
 }

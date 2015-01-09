@@ -23,7 +23,7 @@ class ofxLoaderSpool{
         void update();
     
         ofxLoaderBatch* addBatch(string _batchId);
-        ofxLoaderBatch* addBatch(ofxLoaderBatch* batch);
+        ofxLoaderBatch* addBatch(ofxLoaderBatch batch);
     
         ofxLoaderBatch* getBatch(string _batchId);
         int getBatchesSize();
@@ -39,7 +39,7 @@ class ofxLoaderSpool{
     
     private:
         ProgressiveTextureLoadQueue * q;
-        map<string, ofxLoaderBatch*> batches;
+        map<string, ofxLoaderBatch> batches;
 };
 
 #endif /* defined(__ofxLoaderSpool__) */
