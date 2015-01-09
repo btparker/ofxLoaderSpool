@@ -30,18 +30,18 @@ void ofxLoaderBatch::setId(string _id){
 }
 
 ofxLoaderBatch* ofxLoaderBatch::addBatch(string _batchId){
-    ofxLoaderBatch* batch = new ofxLoaderBatch(_batchId);
+    ofxLoaderBatch batch = ofxLoaderBatch(_batchId);
     return addBatch(batch);
 }
 
-ofxLoaderBatch* ofxLoaderBatch::addBatch(ofxLoaderBatch* _batch){
-    if(batches.count(_batch->getId()) > 0){
-        ofLogError("Batch '"+getId()+"'::addBatch", "A batch with id "+_batch->getId()+" already exists!");
+ofxLoaderBatch* ofxLoaderBatch::addBatch(ofxLoaderBatch _batch){
+    if(batches.count(_batch.getId()) > 0){
+        ofLogError("Batch '"+getId()+"'::addBatch", "A batch with id "+_batch.getId()+" already exists!");
         return NULL;
     }
-    batches[_batch->getId()] = _batch;
-    batches[_batch->getId()]->setParentLoadQueue(getParentLoadQueue());
-    return batches[_batch->getId()];
+    batches[_batch.getId()] = _batch;
+    batches[_batch.getId()].setParentLoadQueue(getParentLoadQueue());
+    return &batches[_batch.getId()];
 }
 
 void ofxLoaderBatch::addTexture(string _textureFilename, string _textureId = ""){
@@ -67,7 +67,7 @@ ofxLoaderBatch* ofxLoaderBatch::getBatch(string _batchId){
         ofLogError("Batch '"+getId()+"'::getBatch", "No batch found with id "+_batchId);
         return NULL;
     }
-    return batches[_batchId];
+    return &batches[_batchId];
 }
 
 void ofxLoaderBatch::textureDrawable(ofxProgressiveTextureLoad::textureEvent& arg){
@@ -167,10 +167,10 @@ string ofxLoaderBatch::getTextureId(ofTexture *tex){
 }
 
 void ofxLoaderBatch::clear(){
-    for(map<string,ofxLoaderBatch*>::iterator iter = batches.begin(); iter != batches.end(); ++iter)
+    for(map<string,ofxLoaderBatch>::iterator iter = batches.begin(); iter != batches.end(); ++iter)
     {
         string _batchId =  iter->first;
-        batches[_batchId]->clear();
+        batches[_batchId].clear();
     }
     for(map<string,ofTexture*>::iterator iter = textures.begin(); iter != textures.end(); ++iter)
     {
@@ -181,10 +181,10 @@ void ofxLoaderBatch::clear(){
 
 void ofxLoaderBatch::load(){
     startTime = ofGetElapsedTimef();
-    for(map<string,ofxLoaderBatch*>::iterator iter = batches.begin(); iter != batches.end(); ++iter)
+    for(map<string,ofxLoaderBatch>::iterator iter = batches.begin(); iter != batches.end(); ++iter)
     {
         string _batchId =  iter->first;
-        batches[_batchId]->load();
+        batches[_batchId].load();
     }
     for(map<string,ofTexture*>::iterator iter = textures.begin(); iter != textures.end(); ++iter)
     {
@@ -195,10 +195,10 @@ void ofxLoaderBatch::load(){
 
 bool ofxLoaderBatch::isDrawable(){
     bool isBatchDrawable = true;
-    for(map<string,ofxLoaderBatch*>::iterator iter = batches.begin(); iter != batches.end(); ++iter)
+    for(map<string,ofxLoaderBatch>::iterator iter = batches.begin(); iter != batches.end(); ++iter)
     {
         string _id =  iter->first;
-        isBatchDrawable = isBatchDrawable && batches[_id]->isDrawable();
+        isBatchDrawable = isBatchDrawable && batches[_id].isDrawable();
     }
     for(map<string,ofTexture*>::iterator iter = textures.begin(); iter != textures.end(); ++iter)
     {
@@ -210,10 +210,10 @@ bool ofxLoaderBatch::isDrawable(){
 
 bool ofxLoaderBatch::isReady(){
     bool isBatchReady = true;
-    for(map<string,ofxLoaderBatch*>::iterator iter = batches.begin(); iter != batches.end(); ++iter)
+    for(map<string,ofxLoaderBatch>::iterator iter = batches.begin(); iter != batches.end(); ++iter)
     {
         string _batchId =  iter->first;
-        isBatchReady = isBatchReady && batches[_batchId]->isReady();
+        isBatchReady = isBatchReady && batches[_batchId].isReady();
     }
 
     for(map<string,ofTexture*>::iterator iter = textures.begin(); iter != textures.end(); ++iter)
@@ -248,5 +248,10 @@ void ofxLoaderBatch::clearTexture(string _textureId){
 }
 
 ofxLoaderBatch::~ofxLoaderBatch(){
+    for(map<string,ofTexture*>::iterator iter = textures.begin(); iter != textures.end(); ++iter)
+    {
+        clearTexture(textures[iter->first]);
+        textures.erase(iter);
+    }
 }
 
