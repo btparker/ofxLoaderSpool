@@ -56,7 +56,7 @@ public:
     
     // Batches
     ofxLoaderBatch* addBatch(string _id);
-    ofxLoaderBatch* addBatch(ofxLoaderBatch _batch);
+    ofxLoaderBatch* addBatch(ofxLoaderBatch* _batch);
     ofxLoaderBatch* getBatch(string _id);
     
     struct batchEvent{
@@ -80,13 +80,13 @@ private:
     string id;
     
     // Yo dawg, I heard  you like ofxLoaderBatches...
-    map<string, ofxLoaderBatch> batches;
+    map<string, ofxLoaderBatch*> batches;
     
     map<ofTexture*, bool> ready;
     map<ofTexture *, bool> drawable;
     
     // String key is id (which can default to the image filename)
-    map<string, ofTexture> textures;
+    map<string, ofTexture*> textures;
     
     // <ofTexture*, textureId>
     map<ofTexture*, string> ids;
