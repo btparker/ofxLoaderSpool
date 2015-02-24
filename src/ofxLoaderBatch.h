@@ -44,12 +44,12 @@ public:
     ofTexture* loadTexture(string _textureId);
     
     void textureReady(ofxProgressiveTextureLoad::textureEvent& arg);
-    void textureDrawable(ofxProgressiveTextureLoad::textureEvent& arg);
     
     bool isTextureReady(string _textureId);
     bool isTextureReady(ofTexture * tex);
-    bool isTextureDrawable(string _textureId);
-    bool isTextureDrawable(ofTexture * tex);
+    
+    bool isTextureLoading(string _textureId);
+    bool isTextureLoading(ofTexture * tex);
 
     void clearTexture(string _textureId);
     void clearTexture(ofTexture * tex);
@@ -73,7 +73,6 @@ public:
     };
     
     ofEvent<batchEvent>	batchReady; //will notify when the batch is fully loaded, or failed to load
-    ofEvent<batchEvent>	batchDrawable; //will notfy when the batch is drawable,
     
 private:
     // FIELDS //
@@ -83,7 +82,7 @@ private:
     map<string, ofxLoaderBatch*> batches;
     
     map<ofTexture*, bool> ready;
-    map<ofTexture *, bool> drawable;
+    map<ofTexture *, bool> loading;
     
     // String key is id (which can default to the image filename)
     map<string, ofTexture*> textures;
