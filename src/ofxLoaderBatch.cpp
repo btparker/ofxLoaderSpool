@@ -102,11 +102,11 @@ ofTexture* ofxLoaderBatch::loadTexture(string _textureId){
         return NULL;
     }
     else if(isTextureLoading(_textureId)){
-        ofLogWarning("Batch '"+getId()+"'::loadTexture", "Texture '"+_textureId+"' is already loading");
+//        ofLogWarning("Batch '"+getId()+"'::loadTexture", "Texture '"+_textureId+"' is already loading");
         return NULL;
     }
     else if(isTextureReady(_textureId)){
-        ofLogWarning("Batch '"+getId()+"'::loadTexture", "Texture '"+_textureId+"' already loaded");
+//        ofLogWarning("Batch '"+getId()+"'::loadTexture", "Texture '"+_textureId+"' already loaded");
         return getTexture(_textureId);
     }
     ofxProgressiveTextureLoad * loader = q->loadTexture(textureFilenames[_textureId],
