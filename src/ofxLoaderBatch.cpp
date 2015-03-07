@@ -70,7 +70,7 @@ ofxLoaderBatch* ofxLoaderBatch::getBatch(string _batchId){
     return batches[_batchId];
 }
 
-void ofxLoaderBatch::textureReady(ofxProgressiveTextureLoad::textureEvent& arg){
+void ofxLoaderBatch::textureReady(ofxProgressiveTextureLoad::ProgressiveTextureLoadEvent& arg){
     if (arg.fullyLoaded){
         ready[arg.tex] = true;
         loading[arg.tex] = false;

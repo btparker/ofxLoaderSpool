@@ -43,7 +43,7 @@ public:
     
     ofTexture* loadTexture(string _textureId);
     
-    void textureReady(ofxProgressiveTextureLoad::textureEvent& arg);
+    void textureReady(ofxProgressiveTextureLoad::ProgressiveTextureLoadEvent& arg);
     
     bool isTextureReady(string _textureId);
     bool isTextureReady(ofTexture * tex);
