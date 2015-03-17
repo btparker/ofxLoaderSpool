@@ -33,7 +33,7 @@ public:
     void clear();
     
     // Textures
-    void addTexture(string _filename, string _textureId);
+    void addTexture(string _filename, string _textureId = "");
     void initTexture(string _id);
     
     ofTexture* getTexture(string _textureId);

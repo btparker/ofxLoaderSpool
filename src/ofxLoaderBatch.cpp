@@ -44,7 +44,7 @@ ofxLoaderBatch* ofxLoaderBatch::addBatch(ofxLoaderBatch* _batch){
     return batches[_batch->getId()];
 }
 
-void ofxLoaderBatch::addTexture(string _textureFilename, string _textureId = ""){
+void ofxLoaderBatch::addTexture(string _textureFilename, string _textureId){
     if(_textureId.length() == 0){
         _textureId = _textureFilename;
     }
