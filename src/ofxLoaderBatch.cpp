@@ -224,6 +224,7 @@ ofxLoaderBatch::~ofxLoaderBatch(){
         ids.erase(iter->second);
         ready.erase(iter->second);
         iter->second->clear();
+        delete iter->second;
     }
     textures.clear();
 }
