@@ -24,7 +24,7 @@ ofxLoaderBatch* ofxLoaderSpool::addBatch(string _batchId){
 }
 
 void ofxLoaderSpool::update(){
-    q->update();
+//    q->update();
 }
 
 ofxLoaderBatch* ofxLoaderSpool::addBatch(ofxLoaderBatch* batch){

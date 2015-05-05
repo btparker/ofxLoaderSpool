@@ -112,7 +112,10 @@ ofTexture* ofxLoaderBatch::loadTexture(string _textureId){
     ofxProgressiveTextureLoad * loader = q->loadTexture(textureFilenames[_textureId],
                                                         getTexture(_textureId),     /*tex to load into*/
                                                         false,               /*MIP-MAPS!*/
-                                                        CV_INTER_AREA);     /*Resize Quality*/
+                                                        false,              /* USE ARB */
+                                                        CV_INTER_AREA,      /*Resize Quality*/
+                                                        false               /* High priority*/
+                                                        );
     ofLogNotice("Batch '"+getId()+"'",("Texture '"+_textureId + "' loading..."));
     loading[getTexture(_textureId)] = true;
     ofAddListener(loader->textureReady, this, &ofxLoaderBatch::textureReady);
