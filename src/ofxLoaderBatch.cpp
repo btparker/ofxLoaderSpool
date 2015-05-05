@@ -227,5 +227,11 @@ ofxLoaderBatch::~ofxLoaderBatch(){
         delete iter->second;
     }
     textures.clear();
+    
+    for(map<string,ofxLoaderBatch*>::iterator iter = batches.begin(); iter != batches.end(); ++iter){
+        iter->second->clear();
+        delete iter->second;
+    }
+    batches.clear();
 }
 
