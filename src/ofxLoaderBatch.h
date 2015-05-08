@@ -50,9 +50,12 @@ public:
     
     bool isTextureLoading(string _textureId);
     bool isTextureLoading(ofTexture * tex);
-
+    
     void clearTexture(string _textureId);
     void clearTexture(ofTexture * tex);
+    
+    void removeTexture(string _textureId);
+    void removeTexture(ofTexture * tex);
     
     // Batches
     ofxLoaderBatch* addBatch(string _id);

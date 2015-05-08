@@ -206,7 +206,7 @@ void ofxLoaderBatch::clearTexture(ofTexture *tex){
         ofLogError("Batch '"+getId()+"'::clearTexture", "No texture found with given pointer");
         return;
     }
-
+    
     clearTexture(ids[tex]);
 }
 
@@ -221,12 +221,37 @@ void ofxLoaderBatch::clearTexture(string _textureId){
     ofLogNotice("Batch '"+getId()+"'",("Texture '"+_textureId + "' ('"+textureFilenames[_textureId]+"') cleared"));
 }
 
+void ofxLoaderBatch::removeTexture(ofTexture *tex){
+    if(ids.count(tex) == 0){
+        ofLogError("Batch '"+getId()+"'::removeTexture", "No texture found with given pointer");
+        return;
+    }
+    
+    removeTexture(ids[tex]);
+    
+}
+
+void ofxLoaderBatch::removeTexture(string _textureId){
+    if(textures.count(_textureId) == 0){
+        ofLogError("Batch '"+getId()+"'::removeTexture", "No texture found with id "+_textureId);
+        return;
+    }
+    clearTexture(_textureId);
+    ofTexture* tex = textures[_textureId];
+    ids.erase(tex);
+    ready.erase(tex);
+    loading.erase(tex);
+    textureFilenames.erase(_textureId);
+    textures.erase(_textureId);
+    ofLogNotice("Batch '"+getId()+"'",("Texture '"+_textureId + "' removed"));
+}
+
+
+
 ofxLoaderBatch::~ofxLoaderBatch(){
     for(map<string,ofTexture*>::iterator iter = textures.begin(); iter != textures.end(); ++iter)
     {
-        ids.erase(iter->second);
-        ready.erase(iter->second);
-        iter->second->clear();
+        clearTexture(iter->second);
         delete iter->second;
     }
     textures.clear();
